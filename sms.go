@@ -8,28 +8,21 @@ import (
 )
 
 func main() {
-	ReceiverMSISDN := 123
-	SenderName := "Ahmed"
-	SMSText := "it's easy"
 
-	sms(SenderName, ReceiverMSISDN, SMSText)
+	sms()
 }
 
-var SenderName string
-var ReceiverMSISDN int
-var SMSText string
-
-func sms(SenderName string, ReceiverMSISDN int, SMSText string) {
+func sms() {
 	// Create the request payload as a byte slice
 	payload := []byte(`<?xml version="1.0" encoding="UTF-8"?>
 <SubmitSMSRequest xmlns="http://www.edafa.com/web2sms/sms/model/">
-<AccountId>1</AccountId>
-<Password>Password</Password>
+<AccountId></AccountId>
+<Password></Password>
 <SecureHash></SecureHash>
 <SMSList>
- <SenderName>SenderName</SenderName>
- <ReceiverMSISDN>ReceiverMSISDN</ReceiverMSISDN>
- <SMSText>SMSText</SMSText>
+ <SenderName></SenderName>
+ <ReceiverMSISDN></ReceiverMSISDN>
+ <SMSText></SMSText>
 </SMSList>
 </SubmitSMSRequest>
 `)
