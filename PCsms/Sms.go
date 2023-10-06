@@ -19,11 +19,11 @@ type SMSLists struct {
 }
 
 type SubmitSMSRequest struct {
-	XMLName    string     `xml:"SubmitSMSRequest"`
-	AccountId  int        `xml:"AccountId"`
-	Password   string     `xml:"Password"`
-	SecureHash []byte     `xml:"SecureHash"`
-	SMSList    []SMSLists `xml:"SMSList"`
+	XMLName    string   `xml:"SubmitSMSRequest"`
+	AccountId  int      `xml:"AccountId"`
+	Password   string   `xml:"Password"`
+	SecureHash []byte   `xml:"SecureHash"`
+	SMSList    SMSLists `xml:"SMSList"`
 }
 
 func main() {
@@ -40,11 +40,11 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 		AccountId:  Accountid,
 		Password:   Pass,
 		SecureHash: Secure,
-		SMSList: []SMSLists{{
+		SMSList: SMSLists{
 			SenderName:     Name,
 			ReceiverMSISDN: Receiver,
 			SMSText:        Text,
-		}},
+		},
 	}
 
 	enc := xml.NewEncoder(os.Stdout)
