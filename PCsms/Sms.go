@@ -27,19 +27,15 @@ type SubmitSMSRequest struct {
 }
 
 func main() {
-	//AccountId=1&Password=password&SenderName=sender1&ReceiverMSISDN=201000000000&
-	//SMSText=text1
-	Accountid := 1
-	Pass := "123@test"
-	Name := "Ahmed"
-	Receiver := 1
-	Text := "how are yoy?"
 
+	funcsms(1, "123@test", "Ahmed", 1, "how are yoy?")
+}
+
+func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string) {
 	h := sha256.New()
 	h.Write([]byte(string(Accountid) + Pass + Name + string(Receiver) + Text))
-	// Calculate and print the hash
 	Secure := h.Sum(nil)
-	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 	bk := SubmitSMSRequest{
 		AccountId:  Accountid,
 		Password:   Pass,
