@@ -47,7 +47,7 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 			SMSText:        Text,
 		}},
 	}
-
+	os.Stdout.WriteString(xml.Header)
 	enc := xml.NewEncoder(os.Stdout)
 	enc.Indent("", "\t")
 
