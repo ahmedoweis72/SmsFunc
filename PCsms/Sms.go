@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/hex"
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
@@ -33,13 +34,13 @@ func main() {
 
 func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string) {
 	h := sha256.New()
-	h.Write([]byte(string(Accountid) + Pass + Name + string(Receiver) + Text))
-	Secure := h.Sum(nil)
-
+	h.Write([]byte("AccountId=" + string(Accountid) + "&Password=" + Pass + "&SenderName=" + Name + "&ReceiverMSISDN=" + string(Receiver) + "&SMSText=" + Text))
+	Secure := hex.EncodeToString(h.Sum(nil))
+	fmt.Println(Secure)
 	bk := SubmitSMSRequest{
 		AccountId:  Accountid,
 		Password:   Pass,
-		SecureHash: Secure,
+		SecureHash: []byte(Secure),
 		SMSList: []SMSLists{{
 			SenderName:     Name,
 			ReceiverMSISDN: Receiver,
@@ -56,6 +57,7 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 		fmt.Fprintln(os.Stderr, err)
 	}
 	out, err := xml.Marshal(&bk)
+
 	resp, err := http.Post("https://<serverip>:<port>/web2sms/sms/submit/CampaignApi ", "smsreq/xml", bytes.NewBuffer(out))
 	if err != nil {
 		log.Fatal(err)
@@ -68,7 +70,14 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 	if err != nil {
 		log.Fatal(err)
 	}
+	status := resp.Status
+	statusCode := resp.StatusCode
 
 	// Print the response body
+
 	fmt.Println(string(body))
+
+	fmt.Println(status)
+	fmt.Println(statusCode)
+
 }
