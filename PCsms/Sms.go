@@ -13,7 +13,7 @@ import (
 )
 
 type SMSLists struct {
-	XMLName        string `xml:"transition"`
+	XMLName        string `xml:"SMSList"`
 	SenderName     string `xml:"duration"`
 	ReceiverMSISDN int    `xml:"ReceiverMSISDN"`
 	SMSText        string `xml:"SMSText"`
@@ -70,14 +70,16 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 	if err != nil {
 		log.Fatal(err)
 	}
-	status := resp.Status
-	statusCode := resp.StatusCode
+	/*resp.RespCode = "00"
+	resp.RespMsg = "Login Successful"*/
+	status := resp.StatusCode
+	if status == 200 {
+		fmt.Println("SUCCESS")
+	}
+	fmt.Println("INVALID_REQUEST")
 
 	// Print the response body
 
 	fmt.Println(string(body))
-
-	fmt.Println(status)
-	fmt.Println(statusCode)
 
 }
