@@ -15,7 +15,7 @@ import (
 
 type SMSLists struct {
 	XMLName        string `xml:"SMSList"`
-	SenderName     string `xml:"duration"`
+	SenderName     string `xml:"SenderName"`
 	ReceiverMSISDN int    `xml:"ReceiverMSISDN"`
 	SMSText        string `xml:"SMSText"`
 }
@@ -96,7 +96,6 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 	fmt.Println("INVALID_REQUEST")
 
 	// Print the response body
-
 	fmt.Println(string(body))
 
 }
