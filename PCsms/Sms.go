@@ -75,7 +75,7 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 	}
 	out, err := xml.Marshal(&bk)
 
-	resp, err := http.Post("https://e3len.vodafone.com.eg/web2sms/sms/submit/", "smsreq/xml", bytes.NewBuffer(out))
+	resp, err := http.Post("https://e3len.vodafone.com.eg/web2sms/sms/submit/", "application/xml", bytes.NewBuffer(out))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -92,8 +92,9 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 	status := resp.StatusCode
 	if status == 200 {
 		fmt.Println("SUCCESS")
+	} else {
+		fmt.Println("INVALID_REQUEST")
 	}
-	fmt.Println("INVALID_REQUEST")
 
 	// Print the response body
 	fmt.Println(string(body))
