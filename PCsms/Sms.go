@@ -28,6 +28,12 @@ type SubmitSMSRequest struct {
 	SMSList    []SMSLists `xml:"SMSList"`
 	XMLNS      string     `xml:"xmlns,attr"`
 }
+type SubmitSMSResponse struct {
+	XMLName      xml.Name `xml:"SubmitSMSResponse"`
+	ResultStatus string   `xml:"ResultStatus"`
+	Description  string   `xml:"Description"`
+	SMSStatus    []string `xml:"SMSStatus"`
+}
 
 func main() {
 
@@ -97,6 +103,16 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 	}
 
 	// Print the response body
-	fmt.Println(string(body))
+	//fmt.Println(string(body))
+	xmlData := string(body)
+	var response SubmitSMSResponse
+	err = xml.Unmarshal([]byte(xmlData), &response)
+	if err != nil {
+		fmt.Println("Failed to unmarshal XML response:", err)
+		return
+	}
 
+	fmt.Println("ResultStatus:", response.ResultStatus)
+	fmt.Println("Description:", response.Description)
+	fmt.Println("SMSStatus:", response.SMSStatus)
 }
