@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/xml"
@@ -25,22 +26,38 @@ type SubmitSMSRequest struct {
 	Password   string     `xml:"Password"`
 	SecureHash []byte     `xml:"SecureHash"`
 	SMSList    []SMSLists `xml:"SMSList"`
+	XMLNS      string     `xml:"xmlns,attr"`
 }
 
 func main() {
 
-	funcsms(1, "123@test", "Ahmed", 1, "how are yoy?")
+	funcsms(550049024, "Vodafone.1", "NTGEGYPT", 201010984336, "how are yoy?")
 }
 
 func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string) {
-	h := sha256.New()
-	h.Write([]byte("AccountId=" + string(Accountid) + "&Password=" + Pass + "&SenderName=" + Name + "&ReceiverMSISDN=" + string(Receiver) + "&SMSText=" + Text))
-	Secure := hex.EncodeToString(h.Sum(nil))
-	fmt.Println(Secure)
+	message := string(Accountid) + Pass + Name + string(Receiver) + Text
+	key := "F5B4064ABB0646F9986E154C5AFF0FD7"
+
+	// Convert the key and message to byte arrays
+	keyBytes := []byte(key)
+	messageBytes := []byte(message)
+
+	// Create a new HMAC hasher using SHA-256 and the key
+	hasher := hmac.New(sha256.New, keyBytes)
+
+	// Write the message to the hasher
+	hasher.Write(messageBytes)
+
+	// Compute the HMAC
+	result := hasher.Sum(nil)
+
+	// Convert the result to a hexadecimal string
+	hexResult := hex.EncodeToString(result)
 	bk := SubmitSMSRequest{
+		XMLNS:      "http://www.edafa.com/web2sms/sms/model/",
 		AccountId:  Accountid,
 		Password:   Pass,
-		SecureHash: []byte(Secure),
+		SecureHash: []byte(hexResult),
 		SMSList: []SMSLists{{
 			SenderName:     Name,
 			ReceiverMSISDN: Receiver,
@@ -58,7 +75,7 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 	}
 	out, err := xml.Marshal(&bk)
 
-	resp, err := http.Post("https://<serverip>:<port>/web2sms/sms/submit/CampaignApi ", "smsreq/xml", bytes.NewBuffer(out))
+	resp, err := http.Post("https://e3len.vodafone.com.eg/web2sms/sms/submit/", "smsreq/xml", bytes.NewBuffer(out))
 	if err != nil {
 		log.Fatal(err)
 	}
