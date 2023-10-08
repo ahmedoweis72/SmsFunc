@@ -36,7 +36,6 @@ type SubmitSMSResponse struct {
 }
 
 func main() {
-
 	funcsms(550049024, "Vodafone.1", "NTGEGYPT", 201010984336, "how are yoy?")
 }
 
@@ -93,16 +92,8 @@ func funcsms(Accountid int, Pass string, Name string, Receiver int, Text string)
 	if err != nil {
 		log.Fatal(err)
 	}
-	/*resp.RespCode = "00"
-	resp.RespMsg = "Login Successful"*/
-	status := resp.StatusCode
-	if status == 200 {
-		fmt.Println("SUCCESS")
-	} else {
-		fmt.Println("INVALID_REQUEST")
-	}
 
-	// Print the response body
+	// Print the response body in xml
 	//fmt.Println(string(body))
 	xmlData := string(body)
 	var response SubmitSMSResponse
